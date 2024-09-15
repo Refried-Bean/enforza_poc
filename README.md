@@ -1,6 +1,6 @@
 # Enforza.io Firewall PoC Terraform Configurations
 
-This repository contains Terraform configurations for deploying a proof of concept (PoC) of the Enforza.io firewall product on two major cloud platforms: Amazon Web Services (AWS) and Microsoft Azure. The configurations are organized into two separate subfolders, each tailored to its respective cloud provider.
+This repository contains Terraform configurations for deploying a proof of concept (PoC) of the (https://www.Enforza.io "Enforza.io") firewall product on two major cloud platforms: Amazon Web Services (AWS) and Microsoft Azure. The configurations are organized into two separate subfolders, each tailored to its respective cloud provider.
 
 ## Repository Structure
 
