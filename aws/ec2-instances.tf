@@ -13,7 +13,7 @@ data "aws_ami" "ubuntu" {
   }
 }
 
-data "aws_key_pair" "key_pair_name" {
+data "aws_key_pair" "selected" {
   key_name = var.key_pair_name
 }
 
@@ -22,7 +22,7 @@ resource "aws_instance" "protected" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t2.micro"
   subnet_id     = aws_subnet.protected.id
-  key_name      = data.aws_key_pair.key_pair_name.key_name
+  key_name      = data.aws_key_pair.selected.key_name
 
   vpc_security_group_ids = [aws_security_group.allow_ssh.id]
 
@@ -42,7 +42,7 @@ resource "aws_instance" "firewall" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t2.medium"
   subnet_id     = aws_subnet.firewall.id
-  key_name      = data.aws_key_pair.key_pair_name.key_name
+  key_name      = data.aws_key_pair.selected.key_name
 
   vpc_security_group_ids = [aws_security_group.allow_ssh.id]
 
@@ -62,23 +62,12 @@ resource "aws_instance" "firewall" {
   }
 }
 
-# Additional network interface for firewall instance
-resource "aws_network_interface" "firewall" {
-  subnet_id       = aws_subnet.firewall.id
-  security_groups = [aws_security_group.allow_ssh.id]
-
-  attachment {
-    instance     = aws_instance.firewall.id
-    device_index = 1
-  }
-}
-
 # Bastion Instance
 resource "aws_instance" "bastion" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t2.micro"
   subnet_id     = aws_subnet.bastion.id
-  key_name      = data.aws_key_pair.key_pair_name.key_name
+  key_name      = data.aws_key_pair.selected.key_name
 
   vpc_security_group_ids = [aws_security_group.allow_ssh.id]
 

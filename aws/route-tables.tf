@@ -18,7 +18,7 @@ resource "aws_route_table" "protected" {
 
   route {
     cidr_block           = "0.0.0.0/0"
-    network_interface_id = aws_network_interface.firewall.id
+    network_interface_id = aws_instance.firewall.primary_network_interface_id
   }
 
   tags = {
