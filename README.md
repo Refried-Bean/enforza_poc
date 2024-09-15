@@ -1,11 +1,39 @@
 # Enforza.io Firewall PoC Terraform Configurations
 
-This repository contains Terraform configurations for deploying a proof of concept (PoC) of the Enforza.io firewall product on two major cloud platforms: Amazon Web Services (AWS) and Microsoft Azure. The configurations are organised into two separate subfolders, each tailored to its respective cloud provider.
+This repository contains Terraform configurations for deploying a proof of concept (PoC) of the Enforza.io firewall product on two major cloud platforms: Amazon Web Services (AWS) and Microsoft Azure. The configurations are organized into two separate subfolders, each tailored to its respective cloud provider.
 
 ## Repository Structure
 
 - `aws/`: Contains Terraform configurations for AWS deployment
 - `azure/`: Contains Terraform configurations for Azure deployment
+
+## Infrastructure Diagram
+
+The following diagram represents the general structure of the infrastructure for both AWS and Azure deployments:
+
+```mermaid
+graph TB
+    subgraph VPC/VNet
+        subgraph "Public Subnet"
+            B[Bastion Host]
+            F[Firewall]
+        end
+        subgraph "Private Subnet"
+            P[Protected Instance]
+        end
+    end
+    I[Internet] -->|Public IP| B
+    I -->|Public IP| F
+    B -->|Private IP| F
+    F -->|Private IP| P
+    P -->|All traffic| F
+```
+
+This diagram illustrates:
+- A VPC/VNet with two subnets: Public and Private
+- Bastion Host and Firewall in the Public Subnet, both with public IPs
+- Protected Instance in the Private Subnet
+- Traffic flow from the internet to the Bastion and Firewall, and from the Firewall to the Protected Instance
 
 ## Comparison of AWS and Azure Implementations
 
@@ -18,7 +46,7 @@ Both implementations create:
 - Virtual machines/instances in each subnet
 - A routing mechanism to direct traffic from the protected subnet through the firewall
 - Security rules to allow SSH access
-- A public IP for the bastion host
+- Public IPs for the bastion host and firewall
 
 ### Key Differences
 
@@ -39,8 +67,8 @@ Both implementations create:
    - Azure: Route Tables associated with Subnets, but with different configuration syntax
 
 5. **Public IP Assignment**
-   - AWS: Elastic IP associated with the Bastion instance
-   - Azure: Public IP resource associated with the Bastion VM's network interface
+   - AWS: Elastic IP associated with the Bastion and Firewall instances
+   - Azure: Public IP resource associated with the Bastion and Firewall VM's network interfaces
 
 6. **Firewall VM Configuration**
    - AWS: Uses `source_dest_check = false` on the firewall instance
@@ -56,7 +84,7 @@ Both implementations create:
 
 9. **Image Selection**
    - AWS: Uses data source to find the latest Ubuntu 22.04 LTS AMI
-   - Azure: Specifies Ubuntu 18.04 LTS image directly (can be updated to 22.04 if needed)
+   - Azure: Specifies Ubuntu 22.04 LTS image directly
 
 ### Usage Notes
 
@@ -72,3 +100,16 @@ Both implementations create:
 - Both configurations achieve similar results, so the choice often depends on your existing cloud infrastructure, team expertise, or specific requirements of the Enforza.io product.
 
 For detailed instructions on deploying to each platform, please refer to the README files in the respective subfolders.
+
+## Security Considerations
+
+This PoC configuration includes public IP addresses for the bastion and firewall instances to facilitate easy access and testing. In a production environment, consider the following security enhancements:
+
+- Use a VPN for secure access to the infrastructure instead of public IPs.
+- Implement more stringent security group/network security group rules.
+- Enable additional logging and monitoring.
+- Regularly update and patch all systems.
+
+## Contributing
+
+Push requests encouraged.

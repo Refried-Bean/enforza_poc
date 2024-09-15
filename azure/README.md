@@ -20,7 +20,7 @@ tenant_id          = "your_azure_tenant_id_here"
 admin_password     = "your_vm_admin_password_here"
 ```
 
-**Important:** 
+**Important:**
 - Do not commit the `secrets.tfvars` file to version control. Add it to your `.gitignore` file to prevent accidental commits.
 - Ensure that you have the necessary permissions in your Azure subscription to create the resources defined in this Terraform configuration.
 
@@ -51,14 +51,6 @@ This Terraform configuration will create:
 - Necessary route tables and network security groups
 - The bastion VM will have a public IP for access
 
-## Additional Information
-
-[Add any additional information about the PoC setup, Enforza.io specifics, or other relevant details here.]
-
 ## Contributing
 
-[Add contribution guidelines if applicable]
-
-## License
-
-[Specify the license for this project]
+Push Requests encouraged.
